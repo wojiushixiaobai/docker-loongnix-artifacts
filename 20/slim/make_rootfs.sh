@@ -74,4 +74,4 @@ fi
 
 mv $WKDIR/rootfs.tar.xz .
 sha256sum rootfs.tar.xz | awk '{ print $1 }' > rootfs.tar.xz.sha256
-rm -rf WKDIR
+rm -rf $WKDIR
