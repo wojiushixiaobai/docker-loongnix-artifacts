@@ -22,6 +22,9 @@ WKDIR=`mktemp -d`
 mkdir -pv $WKDIR/$ROOTFS
 cp .slimify-includes $WKDIR/.slimify-includes
 cp .slimify-excludes $WKDIR/.slimify-excludes
+cp loongarch64.list $WKDIR/
+cp trusted.gpg $WKDIR/
+
 pushd $WKDIR
 
 if [ ! -f /usr/share/debootstrap/scripts/$RELEASE ]; then
@@ -64,7 +67,8 @@ while [ "$(
                 | wc -c
         )" -gt 0 ]; do true; done
 
-
+mv loongarch64.list $ROOTFS/etc/apt/sources.list.d/
+mv trusted.gpg $ROOTFS/etc/apt/
 tar -cJf rootfs.tar.xz -C $ROOTFS .
 popd
 
