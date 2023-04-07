@@ -2,8 +2,8 @@
 
 REGISTRY?=cr.loongnix.cn
 ORGANIZATION?=library
-REPOSITORY?=loongnix
-TAG?=20-slim
+REPOSITORY?=debian
+TAG?=buster-slim
 
 IMAGE=$(REGISTRY)/$(ORGANIZATION)/$(REPOSITORY):$(TAG)
 
@@ -20,4 +20,7 @@ push:
 	docker push $(IMAGE)
 
 $(ROOTFS):
-	./make_rootfs.sh
+	docker run -it --rm \
+		-v `pwd`:/wk \
+		cr.loongnix.cn/library/debian:buster \
+		/bin/bash -c "/wk/make_rootfs.sh /wk"
