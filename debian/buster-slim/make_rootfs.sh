@@ -3,13 +3,13 @@
 : ${DISTRO:="loongnix"}
 : ${RELEASE:=DaoXiangHu-stable}
 : ${MIRROR_ADDRESS:=http://pkg.loongnix.cn/loongnix}
-: ${ROOTFS:="rootfs.tar.gz"}
+: ${ROOTFS:="rootfs.tar.xz"}
 
 WKDIR=$1
 cd ${WKDIR?}
 
-apt update -y
-apt install -y debootstrap xz-utils
+apt-get update -y
+apt-get install -y debootstrap xz-utils
 if [ ! -f /usr/share/debootstrap/scripts/$RELEASE ]; then
 	ln -s /usr/share/debootstrap/scripts/stable /usr/share/debootstrap/scripts/$RELEASE
 fi
@@ -55,6 +55,9 @@ while [ "$(
 
 cp loongarch64.list $TMPDIR/etc/apt/sources.list.d/
 cp trusted.gpg $TMPDIR/etc/apt/
+cp apt.conf.d/* $TMPDIR/etc/apt/apt.conf.d/
+
+chroot $TMPDIR rm -rf /tmp/* /var/cache/apt/* /var/lib/apt/lists/*
 
 tar -cJf rootfs.tar.xz -C $TMPDIR .
 sha256sum rootfs.tar.xz | awk '{ print $1 }' > rootfs.tar.xz.sha256
